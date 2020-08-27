@@ -28,7 +28,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Ares Snek</string>
+         <string>So Anyways I Started Blastin</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -84,37 +84,37 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="raging_check_box">
+           <widget class="QCheckBox" name="two_weapon_fighting_check_box">
             <property name="text">
-             <string>Raging</string>
+             <string>Two Weapon Fighting</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="charging_check_box">
+           <widget class="QCheckBox" name="deadly_aim_check_box">
             <property name="text">
-             <string>Charging</string>
+             <string>Deadly Aim</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="water_subtype_check_box">
+           <widget class="QCheckBox" name="point_blank_check_box">
             <property name="text">
-             <string>Attacking Water Subtype</string>
+             <string>Point Blank Shot (30ft or closer)</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="flanking_bonus_check_box">
+           <widget class="QCheckBox" name="improved_point_blank_check_box">
             <property name="text">
-             <string>Flanking</string>
+             <string>Improved Point Blank Shot (15ft or closer)</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="sneak_attack_check_box">
+           <widget class="QCheckBox" name="close_and_deadly_check_box">
             <property name="text">
-             <string>Sneak Attack</string>
+             <string>Up Close and Deadly</string>
             </property>
            </widget>
           </item>
@@ -133,7 +133,7 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0">
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="4,0,3,0,3">
         <property name="leftMargin">
          <number>15</number>
         </property>
@@ -192,6 +192,25 @@
           </property>
           <property name="text">
            <string>Damage:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="crit_multiplier_spin_box">
+          <property name="maximumSize">
+           <size>
+            <width>35</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string>Crit Multiplier</string>
+          </property>
+          <property name="minimum">
+           <number>2</number>
+          </property>
+          <property name="maximum">
+           <number>4</number>
           </property>
          </widget>
         </item>
