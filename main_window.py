@@ -101,6 +101,8 @@ class MainWindow(QMainWindow):
         spin_max = num_attacks
         if self.haste_enabled:
             spin_max += 1
+        if self.two_weapon_fighting_enabled:
+            spin_max += self.configuration['TWO_WEAPON_FIGHTING_LEVEL']
         self.ui.num_hits_spin_box.setMaximum(spin_max)
 
         # Get num hits
