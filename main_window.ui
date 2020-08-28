@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Ares Snek</string>
+   <string>Blastin'</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -112,11 +112,38 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="close_and_deadly_check_box">
-            <property name="text">
-             <string>Up Close and Deadly</string>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QCheckBox" name="close_and_deadly_check_box">
+              <property name="text">
+               <string>Up Close and Deadly</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="up_close_and_deadly_spin_box">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
@@ -134,12 +161,6 @@
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout" stretch="4,0,3,0,3">
-        <property name="leftMargin">
-         <number>15</number>
-        </property>
-        <property name="rightMargin">
-         <number>15</number>
-        </property>
         <item>
          <widget class="QLabel" name="attack_bonus_label">
           <property name="font">
@@ -160,17 +181,8 @@
         </item>
         <item>
          <widget class="QSpinBox" name="num_hits_spin_box">
-          <property name="maximumSize">
-           <size>
-            <width>35</width>
-            <height>16777215</height>
-           </size>
-          </property>
           <property name="toolTip">
            <string>Number of Hits</string>
-          </property>
-          <property name="suffix">
-           <string/>
           </property>
           <property name="minimum">
            <number>1</number>
@@ -197,12 +209,6 @@
         </item>
         <item>
          <widget class="QSpinBox" name="crit_multiplier_spin_box">
-          <property name="maximumSize">
-           <size>
-            <width>35</width>
-            <height>16777215</height>
-           </size>
-          </property>
           <property name="toolTip">
            <string>Crit Multiplier</string>
           </property>
@@ -257,7 +263,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>28</height>
     </rect>
    </property>
   </widget>
