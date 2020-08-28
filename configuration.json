@@ -2,7 +2,7 @@
   "DEX":23,
   "BAB":10,
   "ATTACK_BONUS":2,
-  "DAMAGE_BONUS":1,
+  "DAMAGE_BONUS":2,
   "DAMAGE_DIE":[1, 8],
   "WEAPON_BONUS":2,
   "HASTE":1,

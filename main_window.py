@@ -1,7 +1,7 @@
 import json
 
 # Third party imports
-from PyQt5.QtWidgets import (QMainWindow)
+from PyQt5.QtWidgets import QMainWindow
 
 # Local imports
 from main_window_init import Ui_MainWindow
@@ -15,7 +15,7 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.configuration = json.load(open("configuration.json", "r"))
+        self.configuration = json.load(open('configuration.json', 'r'))
 
         # Class variables to hold state of check boxes
         self.inspire_courage_enabled = False
@@ -38,6 +38,7 @@ class MainWindow(QMainWindow):
         # Auto update when spin box toggled
         self.ui.num_hits_spin_box.valueChanged.connect(self.update_output)
         self.ui.crit_multiplier_spin_box.valueChanged.connect(self.update_output)
+        self.ui.up_close_and_deadly_spin_box.valueChanged.connect(self.update_output)
 
         # Initialize output with initial settings
         self.update_output()
@@ -70,40 +71,48 @@ class MainWindow(QMainWindow):
 
     def up_close_and_deadly_toggled(self, state):
         self.up_close_and_deadly_enabled = state
+        self.ui.up_close_and_deadly_spin_box.setEnabled(state)
         self.update_output()
 
     def update_output(self):
         # Calculate dex bonus
-        dex_bonus = int((self.configuration['DEX'] - 10) / 2)
+        dex_bonus = (self.configuration['DEX'] - 10) // 2
 
         # Calculate Attack Bonus
         attack_bonus = self.calculate_attack_bonus(dex_bonus)
 
         # Calculate number of attacks
-        num_attacks = 1 + int((self.configuration['BAB'] - 1) / 5)
+        num_attacks = 1 + ((self.configuration['BAB'] - 1) // 5)
 
         # Main Attacks
         attack_text = f' Attack Bonus: + {attack_bonus}'
         if self.two_weapon_fighting_enabled:
-            attack_text = attack_text + f'/{attack_bonus}'
+            attack_text += f'/{attack_bonus}'
+
         # Haste Attack
         if self.haste_enabled:
-            attack_text = attack_text + f'/{attack_bonus}'
+            attack_text += f'/{attack_bonus}'
+
         # Iterative Attacks
         for i in range(num_attacks - 1):
             # Add more iteratives so long as the required feats are had
             if self.two_weapon_fighting_enabled and self.configuration['TWO_WEAPON_FIGHTING_LEVEL'] > i+1:
-                attack_text = attack_text + f'/{attack_bonus - (5 * (i + 1))}'
-            attack_text = attack_text + f'/{attack_bonus - (5 * (i + 1))}'
+                attack_text += f'/{attack_bonus - (5 * (i + 1))}'
+
+            attack_text += f'/{attack_bonus - (5 * (i + 1))}'
+
         self.ui.attack_bonus_label.setText(attack_text)
 
         # Set new spin box max
         spin_max = num_attacks
         if self.haste_enabled:
             spin_max += 1
+
         if self.two_weapon_fighting_enabled:
             spin_max += self.configuration['TWO_WEAPON_FIGHTING_LEVEL']
+
         self.ui.num_hits_spin_box.setMaximum(spin_max)
+        self.ui.up_close_and_deadly_spin_box.setMaximum(spin_max)
 
         # Get num hits
         num_hits = int(self.ui.num_hits_spin_box.value())
@@ -117,30 +126,30 @@ class MainWindow(QMainWindow):
         self.ui.damage_label.setText(f'Damage: {dice} + {damage}')
 
         crit_mod = int(self.ui.crit_multiplier_spin_box.value())
-        self.ui.crit_damage_label.setText(
-            f'Critical Damage: {crit_dice} + {crit_mod * damage}')
+        self.ui.crit_damage_label.setText(f'Critical Damage: {crit_dice} + {crit_mod * damage}')
 
     def calculate_attack_bonus(self, dex_bonus):
-        attack_bonus = self.configuration['BAB'] + self.configuration['WEAPON_BONUS'] + dex_bonus + \
-                       self.configuration['ATTACK_BONUS']
+        conf = self.configuration
+
+        attack_bonus = conf['BAB'] + conf['WEAPON_BONUS'] + dex_bonus + conf['ATTACK_BONUS']
 
         if self.inspire_courage_enabled:
-            attack_bonus += self.configuration['INSPIRE']
+            attack_bonus += conf['INSPIRE']
 
         if self.haste_enabled:
-            attack_bonus += self.configuration['HASTE']
+            attack_bonus += conf['HASTE']
 
         if self.deadly_aim_enabled:
-            attack_bonus += self.configuration['DEADLY_AIM_PENALTY']
+            attack_bonus += conf['DEADLY_AIM_PENALTY']
 
         if self.point_blank_enabled:
-            attack_bonus += self.configuration['POINT_BLANK']
+            attack_bonus += conf['POINT_BLANK']
 
         if self.improved_point_blank_enabled:
-            attack_bonus += self.configuration['IMPROVED_POINT_BLANK']
+            attack_bonus += conf['IMPROVED_POINT_BLANK']
 
         if self.two_weapon_fighting_enabled:
-            attack_bonus += self.configuration['TWO_WEAPON_FIGHTING_PENALTY']
+            attack_bonus += conf['TWO_WEAPON_FIGHTING_PENALTY']
 
         return attack_bonus
 
@@ -166,16 +175,18 @@ class MainWindow(QMainWindow):
 
         crit_multiplier = int(self.ui.crit_multiplier_spin_box.value())
 
-        up_close_and_personal_dice = self.configuration['UP_CLOSE_AND_DEADLY_DICE']
+        dice = f'{hits * (weapon_dice[0])}d{weapon_dice[1]}'
+        crit_dice = f'{hits * (crit_multiplier * weapon_dice[0])}d{weapon_dice[1]}'
 
-        if not self.up_close_and_deadly_enabled:
-            dice = f'{hits * (weapon_dice[0])}d{weapon_dice[1]}'
-            crit_dice = f'{hits * (crit_multiplier * weapon_dice[0])}d{weapon_dice[1]}'
-        elif self.up_close_and_deadly_enabled:
-            dice = f'{hits * (weapon_dice[0] + up_close_and_personal_dice[0])}d{weapon_dice[1]}'
-            crit_dice = f'{hits * (crit_multiplier * weapon_dice[0] + up_close_and_personal_dice[0])}d{weapon_dice[1]}'
-        else:
-            dice = 'error'
-            crit_dice = 'error'
+        if self.up_close_and_deadly_enabled:
+            num_dice = self.configuration['UP_CLOSE_AND_DEADLY_DICE'][0]
+            die_type = self.configuration['UP_CLOSE_AND_DEADLY_DICE'][1]
+
+            num_invocations = int(self.ui.up_close_and_deadly_spin_box.value())
+
+            up_close_and_deadly_dice = f'{num_invocations * num_dice}d{die_type}'
+            dice += f' + {up_close_and_deadly_dice}'
+            crit_dice += f' + {up_close_and_deadly_dice}'
 
         return dice, crit_dice
+
