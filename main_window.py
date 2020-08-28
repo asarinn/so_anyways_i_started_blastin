@@ -166,16 +166,13 @@ class MainWindow(QMainWindow):
 
         crit_multiplier = int(self.ui.crit_multiplier_spin_box.value())
 
-        up_close_and_personal_dice = self.configuration['UP_CLOSE_AND_DEADLY_DICE']
+        dice = f'{hits * (weapon_dice[0])}d{weapon_dice[1]}'
+        crit_dice = f'{hits * (crit_multiplier * weapon_dice[0])}d{weapon_dice[1]}'
 
-        if not self.up_close_and_deadly_enabled:
-            dice = f'{hits * (weapon_dice[0])}d{weapon_dice[1]}'
-            crit_dice = f'{hits * (crit_multiplier * weapon_dice[0])}d{weapon_dice[1]}'
-        elif self.up_close_and_deadly_enabled:
-            dice = f'{hits * (weapon_dice[0] + up_close_and_personal_dice[0])}d{weapon_dice[1]}'
-            crit_dice = f'{hits * (crit_multiplier * weapon_dice[0] + up_close_and_personal_dice[0])}d{weapon_dice[1]}'
-        else:
-            dice = 'error'
-            crit_dice = 'error'
+        # TODO: add spinbox for number of times up close and deadly is invoked (maximum 1 every attack)
+        if self.up_close_and_deadly_enabled:
+            up_close_and_deadly_dice = self.configuration['UP_CLOSE_AND_DEADLY_DICE']
+            dice += f' + {up_close_and_deadly_dice[0]}d{up_close_and_deadly_dice[1]}'
+            crit_dice += f' + {up_close_and_deadly_dice[0]}d{up_close_and_deadly_dice[1]}'
 
         return dice, crit_dice
