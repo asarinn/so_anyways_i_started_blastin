@@ -112,10 +112,12 @@ class MainWindow(QMainWindow):
             spin_max += self.configuration['TWO_WEAPON_FIGHTING_LEVEL']
 
         self.ui.num_hits_spin_box.setMaximum(spin_max)
-        self.ui.up_close_and_deadly_spin_box.setMaximum(spin_max)
 
         # Get num hits
         num_hits = int(self.ui.num_hits_spin_box.value())
+
+        # Set up close and deadly maximum to number of hits
+        self.ui.up_close_and_deadly_spin_box.setMaximum(num_hits)
 
         # Calculate Damage Bonus
         damage = self.calculate_damage(dex_bonus) * num_hits
