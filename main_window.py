@@ -1,7 +1,8 @@
 import json
 
 # Third party imports
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QShortcut
+from PyQt5.QtGui import QKeySequence
 
 # Local imports
 from main_window_init import Ui_MainWindow
@@ -25,6 +26,11 @@ class MainWindow(QMainWindow):
         self.point_blank_enabled = False
         self.improved_point_blank_enabled = False
         self.up_close_and_deadly_enabled = False
+        self.rapid_shot_enabled = False
+
+        # Close program on Ctrl+Q
+        shortcut_close = QShortcut(QKeySequence('Ctrl+Q'), self)
+        shortcut_close.activated.connect(self.close)
 
         # Connections to toggle state on check box click
         self.ui.inspire_courage_check_box.clicked.connect(self.inspire_courage_toggled)
@@ -34,6 +40,7 @@ class MainWindow(QMainWindow):
         self.ui.point_blank_check_box.clicked.connect(self.point_blank_toggled)
         self.ui.improved_point_blank_check_box.clicked.connect(self.improved_point_blank_shot_toggled)
         self.ui.close_and_deadly_check_box.clicked.connect(self.up_close_and_deadly_toggled)
+        self.ui.rapid_shot_check_box.clicked.connect(self.rapid_shot_toggled)
 
         # Auto update when spin box toggled
         self.ui.num_hits_spin_box.valueChanged.connect(self.update_output)
@@ -43,35 +50,39 @@ class MainWindow(QMainWindow):
         # Initialize output with initial settings
         self.update_output()
 
-    def inspire_courage_toggled(self, state):
-        self.inspire_courage_enabled = state
+    def inspire_courage_toggled(self, checked):
+        self.inspire_courage_enabled = checked
         self.update_output()
 
-    def haste_toggled(self, state):
-        self.haste_enabled = state
+    def haste_toggled(self, checked):
+        self.haste_enabled = checked
         self.update_output()
 
-    def two_weapon_fighting_toggled(self, state):
-        self.two_weapon_fighting_enabled = state
+    def two_weapon_fighting_toggled(self, checked):
+        self.two_weapon_fighting_enabled = checked
         self.update_output()
 
-    def deadly_aim_toggled(self, state):
-        self.deadly_aim_enabled = state
+    def deadly_aim_toggled(self, checked):
+        self.deadly_aim_enabled = checked
         self.update_output()
 
-    def improved_point_blank_shot_toggled(self, state):
-        self.improved_point_blank_enabled = state
-        self.point_blank_enabled = state
-        self.ui.point_blank_check_box.setChecked(state)
+    def improved_point_blank_shot_toggled(self, checked):
+        self.improved_point_blank_enabled = checked
+        self.point_blank_enabled = checked
+        self.ui.point_blank_check_box.setChecked(checked)
         self.update_output()
 
-    def point_blank_toggled(self, state):
-        self.point_blank_enabled = state
+    def point_blank_toggled(self, checked):
+        self.point_blank_enabled = checked
         self.update_output()
 
-    def up_close_and_deadly_toggled(self, state):
-        self.up_close_and_deadly_enabled = state
-        self.ui.up_close_and_deadly_spin_box.setEnabled(state)
+    def up_close_and_deadly_toggled(self, checked):
+        self.up_close_and_deadly_enabled = checked
+        self.ui.up_close_and_deadly_spin_box.setEnabled(checked)
+        self.update_output()
+
+    def rapid_shot_toggled(self, checked):
+        self.rapid_shot_enabled = checked
         self.update_output()
 
     def update_output(self):
@@ -93,6 +104,9 @@ class MainWindow(QMainWindow):
         if self.haste_enabled:
             attack_text += f'/{attack_bonus}'
 
+        if self.rapid_shot_enabled:
+            attack_text += f'/{attack_bonus}'
+
         # Iterative Attacks
         for i in range(num_attacks - 1):
             # Add more iteratives so long as the required feats are had
@@ -110,6 +124,9 @@ class MainWindow(QMainWindow):
 
         if self.two_weapon_fighting_enabled:
             spin_max += self.configuration['TWO_WEAPON_FIGHTING_LEVEL']
+
+        if self.rapid_shot_enabled:
+            spin_max += 1
 
         self.ui.num_hits_spin_box.setMaximum(spin_max)
 
@@ -152,6 +169,9 @@ class MainWindow(QMainWindow):
 
         if self.two_weapon_fighting_enabled:
             attack_bonus += conf['TWO_WEAPON_FIGHTING_PENALTY']
+
+        if self.rapid_shot_enabled:
+            attack_bonus += conf['RAPID_SHOT_PENALTY']
 
         return attack_bonus
 

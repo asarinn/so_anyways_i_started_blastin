@@ -37,20 +37,8 @@
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,1">
-        <property name="topMargin">
-         <number>2</number>
-        </property>
-        <property name="bottomMargin">
-         <number>2</number>
-        </property>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_4">
-          <property name="topMargin">
-           <number>2</number>
-          </property>
-          <property name="bottomMargin">
-           <number>2</number>
-          </property>
           <item>
            <widget class="QLabel" name="label_2">
             <property name="font">
@@ -144,6 +132,13 @@
              </spacer>
             </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="rapid_shot_check_box">
+            <property name="text">
+             <string>Rapid Shot</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -263,7 +258,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>28</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
