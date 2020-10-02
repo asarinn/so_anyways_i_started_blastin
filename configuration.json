@@ -1,8 +1,8 @@
 {
   "DEX": 23,
   "BAB": 11,
-  "ATTACK_BONUS": 2,
-  "DAMAGE_BONUS": 2,
+  "ATTACK_BONUS": 3,
+  "DAMAGE_BONUS": 3,
   "DAMAGE_DIE": [1, 8],
   "WEAPON_BONUS": 2,
   "HASTE": 1,
