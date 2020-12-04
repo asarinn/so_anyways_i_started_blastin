@@ -18,6 +18,11 @@ class MainWindow(QMainWindow):
 
         self.configuration = json.load(open('configuration.json', 'r'))
 
+        # Initialize tracked resources
+        grit_pool = self.configuration['GRIT_POOL']
+        self.ui.grit_pool_spin_box.setMaximum(grit_pool)
+        self.ui.grit_pool_spin_box.setValue(grit_pool)
+
         # Class variables to hold state of check boxes
         self.inspire_courage_enabled = False
         self.haste_enabled = False
