@@ -38,14 +38,14 @@ class MainWindow(QMainWindow):
         shortcut_close.activated.connect(self.close)
 
         # Connections to toggle state on check box click
-        self.ui.inspire_courage_check_box.clicked.connect(self.inspire_courage_toggled)
-        self.ui.haste_check_box.clicked.connect(self.haste_toggled)
-        self.ui.two_weapon_fighting_check_box.clicked.connect(self.two_weapon_fighting_toggled)
-        self.ui.deadly_aim_check_box.clicked.connect(self.deadly_aim_toggled)
-        self.ui.point_blank_check_box.clicked.connect(self.point_blank_toggled)
-        self.ui.improved_point_blank_check_box.clicked.connect(self.improved_point_blank_shot_toggled)
-        self.ui.close_and_deadly_check_box.clicked.connect(self.up_close_and_deadly_toggled)
-        self.ui.rapid_shot_check_box.clicked.connect(self.rapid_shot_toggled)
+        self.ui.inspire_courage_check_box.toggled.connect(self.inspire_courage_toggled)
+        self.ui.haste_check_box.toggled.connect(self.haste_toggled)
+        self.ui.two_weapon_fighting_check_box.toggled.connect(self.two_weapon_fighting_toggled)
+        self.ui.deadly_aim_check_box.toggled.connect(self.deadly_aim_toggled)
+        self.ui.point_blank_check_box.toggled.connect(self.point_blank_toggled)
+        self.ui.improved_point_blank_check_box.toggled.connect(self.improved_point_blank_shot_toggled)
+        self.ui.close_and_deadly_check_box.toggled.connect(self.up_close_and_deadly_toggled)
+        self.ui.rapid_shot_check_box.toggled.connect(self.rapid_shot_toggled)
 
         # Auto update when spin box toggled
         self.ui.num_hits_spin_box.valueChanged.connect(self.update_output)
@@ -73,12 +73,18 @@ class MainWindow(QMainWindow):
 
     def improved_point_blank_shot_toggled(self, checked):
         self.improved_point_blank_enabled = checked
-        self.point_blank_enabled = checked
-        self.ui.point_blank_check_box.setChecked(checked)
+
+        if checked:
+            self.ui.point_blank_check_box.setChecked(checked)
+
         self.update_output()
 
     def point_blank_toggled(self, checked):
         self.point_blank_enabled = checked
+
+        if not checked:
+            self.ui.improved_point_blank_check_box.setChecked(checked)
+
         self.update_output()
 
     def up_close_and_deadly_toggled(self, checked):
