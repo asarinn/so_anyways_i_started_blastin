@@ -100,7 +100,7 @@ class MainWindow(QMainWindow):
         # Calculate dex bonus
         dex_bonus = (self.configuration['DEX'] - 10) // 2
 
-        # Calculate Attack Bonus
+        # Calculate attack bonus
         attack_bonus = self.calculate_attack_bonus(dex_bonus)
 
         # Calculate number of attacks
@@ -111,20 +111,21 @@ class MainWindow(QMainWindow):
         if self.two_weapon_fighting_enabled:
             attack_text += f'/{attack_bonus}'
 
-        # Haste Attack
+        # Haste attack
         if self.haste_enabled:
             attack_text += f'/{attack_bonus}'
 
+        # Rapid shot attack
         if self.rapid_shot_enabled:
             attack_text += f'/{attack_bonus}'
 
-        # Iterative Attacks
-        for i in range(num_attacks - 1):
+        # Iterative attacks
+        for i in range(1, num_attacks):
             # Add more iteratives so long as the required feats are had
-            if self.two_weapon_fighting_enabled and self.configuration['TWO_WEAPON_FIGHTING_LEVEL'] > i+1:
-                attack_text += f'/{attack_bonus - (5 * (i + 1))}'
+            if self.two_weapon_fighting_enabled and self.configuration['TWO_WEAPON_FIGHTING_LEVEL'] > i:
+                attack_text += f'/{attack_bonus - (5 * i)}'
 
-            attack_text += f'/{attack_bonus - (5 * (i + 1))}'
+            attack_text += f'/{attack_bonus - (5 * i)}'
 
         self.ui.attack_bonus_label.setText(attack_text)
 
@@ -147,10 +148,10 @@ class MainWindow(QMainWindow):
         # Set up close and deadly maximum to number of hits
         self.ui.up_close_and_deadly_spin_box.setMaximum(num_hits)
 
-        # Calculate Damage Bonus
+        # Calculate damage bonus
         damage = self.calculate_damage(dex_bonus) * num_hits
 
-        # Calculate Dice
+        # Calculate dice
         dice, crit_dice = self.calculate_dice(num_hits)
 
         self.ui.damage_label.setText(f'Damage: {dice} + {damage}')
@@ -204,20 +205,16 @@ class MainWindow(QMainWindow):
         return damage
 
     def calculate_dice(self, hits):
-        weapon_dice = self.configuration['DAMAGE_DIE']
-
         crit_multiplier = int(self.ui.crit_multiplier_spin_box.value())
-
-        dice = f'{hits * (weapon_dice[0])}d{weapon_dice[1]}'
-        crit_dice = f'{hits * (crit_multiplier * weapon_dice[0])}d{weapon_dice[1]}'
+        num_dice, num_faces = self.configuration['DAMAGE_DIE']
+        dice = f'{hits * num_dice}d{num_faces}'
+        crit_dice = f'{hits * (crit_multiplier * num_dice)}d{num_faces}'
 
         if self.up_close_and_deadly_enabled:
-            num_dice = self.configuration['UP_CLOSE_AND_DEADLY_DICE'][0]
-            die_type = self.configuration['UP_CLOSE_AND_DEADLY_DICE'][1]
-
             num_invocations = int(self.ui.up_close_and_deadly_spin_box.value())
+            num_dice, num_faces = self.configuration['UP_CLOSE_AND_DEADLY_DICE']
+            up_close_and_deadly_dice = f'{num_invocations * num_dice}d{num_faces}'
 
-            up_close_and_deadly_dice = f'{num_invocations * num_dice}d{die_type}'
             dice += f' + {up_close_and_deadly_dice}'
             crit_dice += f' + {up_close_and_deadly_dice}'
 
