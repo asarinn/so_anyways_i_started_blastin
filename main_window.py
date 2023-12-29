@@ -19,6 +19,9 @@ class MainWindow(QMainWindow):
         self.configuration = json.load(open('configuration.json', 'r'))
 
         # Initialize tracked resources
+        health_points = self.configuration['HP']
+        self.ui.health_points_spin_box.setMaximum(health_points)
+        self.ui.health_points_spin_box.setValue(health_points)
         grit_pool = self.configuration['GRIT_POOL']
         self.ui.grit_pool_spin_box.setMaximum(grit_pool)
         self.ui.grit_pool_spin_box.setValue(grit_pool)
